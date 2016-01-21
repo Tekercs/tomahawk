@@ -1,0 +1,5 @@
+build/
+*teszt
+*teszt.cpp
+*.swp
+
