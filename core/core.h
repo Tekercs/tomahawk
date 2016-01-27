@@ -1,31 +1,25 @@
-#ifndef TOMAHAWK_CORE
-#define TOMAHAWK_CORE
+#ifndef WEB_CORE
+#define WEB_CORE
 
-#include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
-#include <unistd.h>
+#include <iostream>
 
 class Server
 {
 	private:
-		int serverSocket, clientSocket, portNumber, clientLength;
+		int serverSocket,  portNumber, clientLength;
 	    struct sockaddr_in serverAddress, clientAddress;
-		char buffer[255];
 
 		Server();
 		Server(Server const&) = delete;
 		void operator = (Server const&) = delete;
+
+		static void threadEntry(int clientSocket);
 	
 	public:
 		static Server& getInstance();
 		void start();
-	
 };
-
-Server& server()
-{
-	return Server::getInstance();
-}
 
 #endif
