@@ -1,2 +1,4 @@
+rm -f ../build/*.h
+rm -f ../build/libcore.so
 g++ *.cpp -fPIC --shared -std=c++11 -o ../build/libcore.so -pthread
 cp *.h ../build/

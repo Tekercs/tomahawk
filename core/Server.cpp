@@ -35,20 +35,22 @@ void Server::start()
 
     while (true)
     {       
-	    int clientSocket = accept(this->serverSocket, (struct sockaddr *) &this->clientAddress, (socklen_t *) &this->clientLength);
+	    int clientAddress = accept(this->serverSocket, (struct sockaddr *) &this->clientAddress, (socklen_t *) &this->clientLength);
 		
-		std::thread clientThread(Server::threadEntry, clientSocket);
+		std::thread clientThread(Server::threadEntry, clientAddress);
 		clientThread.join();
     }
 }
 
-void Server::threadEntry(int clientSocket)
+void Server::threadEntry(const int &clientAddress)
 {
-	char buffer[255];
-  	read(clientSocket, buffer, 250);
+	ClientConnection client(clientAddress);
 
-    std::string response = "HTTP/1.1 200 OK \n Date: Sun, 14 Jan 2016 03:36:20 GMT \nServer: c++ test server \nContent-Length: 18 \nContent-Type: text/html \nConnection: closed \n\n<h1>It's works</h1>\n";
-    write(clientSocket, response.c_str(), response.size());
+	std::string clientRequest;
+	client >> clientRequest;
+	std::cout << clientRequest << std::endl;
 
-    shutdown(clientSocket, 2);	
-}
+    client << "HTTP/1.1 200 OK \n Date: Sun, 14 Jan 2016 03:36:20 GMT \nServer: c++ test server \nContent-Length: 18 \nContent-Type: text/html \nConnection: closed \n\n<h1>It's works</h1>\n";
+
+    client.close();
+}	
