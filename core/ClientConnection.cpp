@@ -1,10 +1,5 @@
-#include "core.h" 
-#include <sys/socket.h>
-#include <string>
-#include <netinet/in.h>
-#include <string.h>
+#include "core.h"
 #include <unistd.h>
-#include <string>
 
 ClientConnection::ClientConnection(const int &address)
 {
@@ -24,7 +19,7 @@ void ClientConnection::operator<<(const std::string &responseMessage)
 void ClientConnection::operator>>(std::string &requestString)
 {
 	char buffer[255];
-	int messageLength = 0;
+	ssize_t messageLength = 0;
 
 	do
 	{

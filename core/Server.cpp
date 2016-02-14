@@ -1,11 +1,5 @@
-#include "core.h" 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <string.h>
-#include <unistd.h>
-#include <string>
+#include "core.h"
 #include <thread>
-#include <iostream>
 
 Server::Server()
 {
@@ -14,7 +8,7 @@ Server::Server()
 
     bzero((char *) &this->serverAddress, sizeof(this->serverAddress));
     this->serverAddress.sin_family = AF_INET;
-    this->serverAddress.sin_port = htons(this->portNumber);
+    this->serverAddress.sin_port = htons((uint16_t) this->portNumber);
     this->serverAddress.sin_addr.s_addr = INADDR_ANY;
 
 	this->clientLength = sizeof(this->clientAddress);
@@ -26,7 +20,7 @@ Server& Server::getInstance()
 {
 	static Server instance;
 
-	return instance; 
+	return instance;
 }
 
 void Server::start()
@@ -34,23 +28,24 @@ void Server::start()
 	listen(this->serverSocket, 5);
 
     while (true)
-    {       
-	    int clientAddress = accept(this->serverSocket, (struct sockaddr *) &this->clientAddress, (socklen_t *) &this->clientLength);
-		
-		std::thread clientThread(Server::threadEntry, clientAddress);
-		clientThread.join();
+    {
+	    int clientSocket = accept(this->serverSocket, (struct sockaddr *) &this->clientAddress, (socklen_t *) &this->clientLength);
+	    if(clientSocket >= 0)
+			std::thread(Server::threadEntry, clientSocket).join();
+		else
+			std::cout << "Unable to accept the connection" << std::endl;
     }
 }
 
-void Server::threadEntry(const int &clientAddress)
+void Server::threadEntry(const int &clientSocket)
 {
-	ClientConnection client(clientAddress);
+	ClientConnection client(clientSocket);
 
-	std::string clientRequest;
-	client >> clientRequest;
-	std::cout << clientRequest << std::endl;
+	std::string clientRequestString;
+	client >> clientRequestString;
+	Request request(clientRequestString);
 
-    client << "HTTP/1.1 200 OK \n Date: Sun, 14 Jan 2016 03:36:20 GMT \nServer: c++ test server \nContent-Length: 18 \nContent-Type: text/html \nConnection: closed \n\n<h1>It's works</h1>\n";
+    client << "HTTP/1.1 200 OK \n Date: Sun, 14 Jan 2016 03:36:20 GMT \nServer: c++ test server \nContent-Length: 146 \nContent-Type: text/html \nConnection: closed \n\n<form method=\"post\"><button>send</button><input type=\"hidden\" value=\"medve\" name=\"hegy\"/><input type=\"hidden\" value=\"halal\" name=\"gyerek\"/> </form>\n";
 
     client.close();
-}	
+}
