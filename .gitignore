@@ -1,5 +1,4 @@
-build/
-*teszt
-*teszt.cpp
+.idea/
+build/*
 *.swp
 
