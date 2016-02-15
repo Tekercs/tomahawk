@@ -17,4 +17,3 @@ set_target_properties(core main
         ARCHIVE_OUTPUT_DIRECTORY "build"
         LIBRARY_OUTPUT_DIRECTORY "build/lib"
         RUNTIME_OUTPUT_DIRECTORY "build")
-
