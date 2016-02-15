@@ -23,7 +23,7 @@ class Request
         void separateBody(const std::vector<std::string> &requestLines);
 		void parseBody();
         void decodeUrlEncodedFormData();
-    
+        void parseQueryStrings();
 
 	public:
 		Request(const std::string &requestString);

@@ -30,25 +30,44 @@ void Request::parseHeader(const std::vector<std::string> &requestLines)
     std::stringstream firstLineStream(requestLines[0]);
     getline(firstLineStream, this->method, ' ');
     getline(firstLineStream, this->url, ' ');
-    getline(firstLineStream, this->httpVersion, ' ');
+    getline(firstLineStream, this->httpVersion, '\r');
+
+    this->parseQueryStrings();
 
     int i = 1;
     std::string tempLine = requestLines[i];
     while(i < requestLines.size() && tempLine != "\r")
     {
         unsigned long propertySeparator =  tempLine.find(':');
-        this->properties[tempLine.substr(0, propertySeparator)] = tempLine.substr(propertySeparator+1);
+        this->properties[tempLine.substr(0, propertySeparator)] = tempLine.substr(propertySeparator+2, tempLine.size()-propertySeparator-3);
 
         i++;
         tempLine = requestLines[i];
     }
 }
 
+void Request::parseQueryStrings()
+{
+    unsigned long delimiterPos = this->url.find('?');
+    if(delimiterPos != std::string::npos)
+    {
+        std::string queryStrings = this->url.substr(delimiterPos+1);
+        this->url = this->url.substr(0, delimiterPos);
+
+        std::stringstream queryStringStream(queryStrings);
+        std::string tempKeyValuePair;
+        while(getline(queryStringStream, tempKeyValuePair, '&'))
+        {
+            delimiterPos = tempKeyValuePair.find('=');
+            this->parameters[tempKeyValuePair.substr(0, delimiterPos)] = tempKeyValuePair.substr(delimiterPos+1);
+        }
+    }
+}
 
 bool Request::isBodyNotEmpty()
 {
     if(this->properties.find("Content-Length") != this->properties.end())
-        return (std::stoi(this->properties["Content-Length"], nullptr)) > 0;
+        return std::stoi(this->properties["Content-Length"], nullptr) > 0;
     else
         return false;
 }
@@ -90,6 +109,11 @@ void Request::parseBody()
         case 0:
             this->decodeUrlEncodedFormData();
         break;
+
+        default:
+            // do noting
+            // just mute the warning
+        break;
     }
 
 }
@@ -117,7 +141,6 @@ std::string Request::getProperty(const std::string &propertyName)
 
 std::string Request::getParameter(const std::string &parameterName)
 {
-    std::cout << parameterName.size() << this->parameters[parameterName].size();
     return this->parameters[parameterName];
 }
 
