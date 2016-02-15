@@ -87,21 +87,13 @@ class PostRequestTest : public ::testing::Test
         }
 };
 
-TEST_F(PostRequestTest, parseFirstLine)
+TEST_F(PostRequestTest, testMusthaveProperties)
 {
-    ASSERT_EQ("POST", request->getMethod());
-    ASSERT_EQ("/", request->getUrl());
-    ASSERT_EQ("HTTP/1.1", request->getHttpVersion());
+    ASSERT_NE("", request->getProperty("Content-Length"));
+    ASSERT_TRUE(std::stoi(request->getProperty("Content-Length"), nullptr) > 0);
 }
 
-TEST_F(PostRequestTest, propertyParse)
-{
-    ASSERT_EQ("gzip, deflate", request->getProperty("Accept-Encoding"));
-    ASSERT_EQ("en-US,en;q=0.8,hu;q=0.6", request->getProperty("Accept-Language"));
-    ASSERT_EQ("23", request->getProperty("Content-Length"));
-}
-
-TEST_F(PostRequestTest, parameterParse)
+TEST_F(PostRequestTest, testUrlEncodedBodyParse)
 {
     ASSERT_EQ("medve", request->getParameter("hegy"));
     ASSERT_EQ("halal", request->getParameter("gyerek"));
