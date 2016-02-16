@@ -58,6 +58,7 @@ class Server
 	private:
 		int serverSocket,  portNumber, clientLength;
 	    struct sockaddr_in serverAddress, clientAddress;
+        std::string resourceFolderPath;
 
 		Server();
 		Server(Server const&) = delete;
@@ -69,7 +70,11 @@ class Server
 	public:
 		static Server& getInstance();
 		void start();
+        Server& setResourceFolderPath(const std::string &newResourceFolderPath);
+        Server& setPortNumber(const int &newPortNumber);
+        int getPortNumber();
 };
 
+Server& server();
 
 #endif

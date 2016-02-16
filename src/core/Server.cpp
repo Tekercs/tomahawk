@@ -4,7 +4,8 @@
 Server::Server()
 {
 	this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-	this->portNumber = 9090;
+	this->portNumber = 80;                   // default portnumber
+    this->resourceFolderPath = "./resource"; // default resource folder path
 
     bzero((char *) &this->serverAddress, sizeof(this->serverAddress));
     this->serverAddress.sin_family = AF_INET;
@@ -12,8 +13,6 @@ Server::Server()
     this->serverAddress.sin_addr.s_addr = INADDR_ANY;
 
 	this->clientLength = sizeof(this->clientAddress);
-
-	bind(this->serverSocket, (struct sockaddr *) &this->serverAddress, sizeof(this->serverAddress));
 }
 
 Server& Server::getInstance()
@@ -25,6 +24,7 @@ Server& Server::getInstance()
 
 void Server::start()
 {
+    bind(this->serverSocket, (struct sockaddr *) &this->serverAddress, sizeof(this->serverAddress));
 	listen(this->serverSocket, 5);
 
     while (true)
@@ -48,4 +48,27 @@ void Server::threadEntry(const int &clientSocket)
     client << "HTTP/1.1 200 OK \n Date: Sun, 14 Jan 2016 03:36:20 GMT \nServer: c++ test server \nContent-Length: 146 \nContent-Type: text/html \nConnection: closed \n\n<form method=\"post\"><button>send</button><input type=\"hidden\" value=\"medve\" name=\"hegy\"/><input type=\"hidden\" value=\"halal\" name=\"gyerek\"/> </form>\n";
 
     client.close();
+}
+
+Server& Server::setPortNumber(const int &newPortNumber)
+{
+    this->portNumber = newPortNumber;
+    this->serverAddress.sin_port = htons((uint16_t) this->portNumber);
+    return *this;
+}
+
+Server& Server::setResourceFolderPath(const std::string &newResourceFolderPath)
+{
+    this->resourceFolderPath = newResourceFolderPath;
+    return *this;
+}
+
+int Server::getPortNumber()
+{
+    return this->portNumber;
+}
+
+Server& server()
+{
+    return Server::getInstance();
 }

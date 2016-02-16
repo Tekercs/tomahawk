@@ -1,8 +1,10 @@
-#include "build/lib/core.h"
+#include "src/core/core.h"
 
 int main ()
 {
-	Server::getInstance().start();
+	server().setPortNumber(9099)
+            .setResourceFolderPath("./resources")
+            .start();
 
 	return 0;
 }
