@@ -11,30 +11,31 @@ class Request
 {	
 
 	private:
-		std::string method;
-		std::string url;
-		std::string httpVersion;
-        std::string body;
-		std::map<std::string, std::string> properties;
-		std::map<std::string, std::string> parameters;
+		std::string method
+                  , url
+                  , httpVersion
+                  , body;
+		std::map<std::string, std::string> properties
+                                          ,parameters;
 
         std::vector<std::string> requestStringToVector(const std::string &requestString);
-		void parseHeader(const std::vector<std::string> &requestLines);
-        void separateBody(const std::vector<std::string> &requestLines);
-		void parseBody();
-        void decodeUrlEncodedFormData();
-        void parseQueryStrings();
+		void parseHeader(const std::vector<std::string> &requestLines)
+           , separateBody(const std::vector<std::string> &requestLines)
+		   , parseBody()
+           , decodeUrlEncodedFormData()
+           , parseQueryStrings();
 
 	public:
 		Request(const std::string &requestString);
 
 		bool isBodyNotEmpty();
-		std::string getMethod();
-		std::string getUrl();
-		std::string getHttpVersion();
-		std::string getProperty(const std::string &propertyName);
-		std::string getParameter(const std::string &parameterName);
-        std::string getBodyString();
+		std::string getUrl()
+                  , getMethod()
+		          , getHttpVersion()
+		          , getProperty(const std::string &propertyName)
+                  , getParameter(const std::string &parameterName)
+                  , operator[](const std::string &fieldName)
+                  , getBodyString();
 };
 
 class ClientConnection
@@ -46,33 +47,36 @@ class ClientConnection
 	public:
 		ClientConnection(const int &address);
 
-		void operator>>(std::string &requestString);
-		void operator<<(const std::string &responseMessage);
+		void operator>>(std::string &requestString)
+           , operator<<(const std::string &responseMessage)
+           , close();
 
 		int getAddress();
-		void close();
 };
 
 class Server
 {
 	private:
-		int serverSocket,  portNumber, clientLength;
-	    struct sockaddr_in serverAddress, clientAddress;
+		int serverSocket
+          , portNumber
+          , clientLength;
+	    struct sockaddr_in serverAddress
+                         , clientAddress;
         std::string resourceFolderPath;
 
 		Server();
 		Server(Server const&) = delete;
 
 		void operator = (Server const&) = delete;
-
 		static void threadEntry(const int &clientSocket);
 
 	public:
 		static Server& getInstance();
 		void start();
-        Server& setResourceFolderPath(const std::string &newResourceFolderPath);
-        Server& setPortNumber(const int &newPortNumber);
         int getPortNumber();
+        Server  &setResourceFolderPath(const std::string &newResourceFolderPath)
+              , &setPortNumber(const int &newPortNumber);
+
 };
 
 Server& server();

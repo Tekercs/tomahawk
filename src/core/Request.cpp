@@ -134,6 +134,12 @@ std::string Request::getBodyString()
     return this->body;
 }
 
+std::string Request::operator[](const std::string &fieldName)
+{
+    std::string value = this->parameters[fieldName];
+    return (value != "")? value : this->properties[fieldName];
+}
+
 std::string Request::getProperty(const std::string &propertyName)
 {
     return this->properties[propertyName];
