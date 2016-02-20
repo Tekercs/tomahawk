@@ -14,6 +14,6 @@ target_link_libraries(main core)
 
 set_target_properties(core main
         PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "build"
-        LIBRARY_OUTPUT_DIRECTORY "build/lib"
-        RUNTIME_OUTPUT_DIRECTORY "build")
+        ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
