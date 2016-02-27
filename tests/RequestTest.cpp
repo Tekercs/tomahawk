@@ -1,5 +1,5 @@
 #include "lib/gtest/include/gtest/gtest.h"
-#include "core.h"
+#include "core/core.h"
 
 // ide jönnek a tesztek
 class GetRequestTest : public ::testing::Test

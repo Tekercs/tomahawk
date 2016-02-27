@@ -12,7 +12,7 @@ add_subdirectory(src)
 
 target_link_libraries(main core)
 
-set_target_properties(core main
+set_target_properties(core main tests
         PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
