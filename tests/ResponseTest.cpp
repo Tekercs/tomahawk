@@ -78,7 +78,7 @@ TEST(ResponseTest, plainTextBody)
 
 TEST(ResponseTest, sendFileContent)
 {
-    server().setResourceFolderPath("./resources");
+    server().setResourceFolderPath("./test_resources");
 
     Response response1;
     response1.setBody("/igen.html");
