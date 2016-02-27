@@ -7,6 +7,34 @@
 #include <map>
 #include <vector>
 
+class Response
+{
+    private:
+        /**
+          * TODO
+          * finish the status code list
+          * https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+          */
+
+        std::string body
+                  , httpVersion
+                  , statusCode;
+        std::map<std::string, std::string> properties;
+        std::string fetchFileMimeType(const std::string filePath);
+
+    public:
+        Response();
+        std::string toString()
+                  , getBody()
+                  , getProperty(const std::string &propertyName);
+
+        bool isEmptyBody();
+        Response &setProperty(const std::string &name, const std::string &value)
+               , &setStatusCode(const std::string &newStatusCode)
+               , &setBody(const std::string &filePath)
+               , &setBody(const std::string &content, const std::string &mimeType);
+};
+
 class Request
 {	
 
@@ -40,7 +68,6 @@ class Request
 
 class ClientConnection
 {
-
 	private:
 		int clientAddress;
 
@@ -49,6 +76,7 @@ class ClientConnection
 
 		void operator>>(std::string &requestString)
            , operator<<(const std::string &responseMessage)
+           , operator<<(Response &response)
            , close();
 
 		int getAddress();
@@ -76,6 +104,8 @@ class Server
         int getPortNumber();
         Server  &setResourceFolderPath(const std::string &newResourceFolderPath)
               , &setPortNumber(const int &newPortNumber);
+
+        std::string getResourceFolderPath();
 
 };
 

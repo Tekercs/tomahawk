@@ -45,7 +45,10 @@ void Server::threadEntry(const int &clientSocket)
 	client >> clientRequestString;
 	Request request(clientRequestString);
 
-    client << "HTTP/1.1 200 OK \n Date: Sun, 14 Jan 2016 03:36:20 GMT \nServer: c++ test server \nContent-Length: 146 \nContent-Type: text/html \nConnection: closed \n\n<form method=\"post\"><button>send</button><input type=\"hidden\" value=\"medve\" name=\"hegy\"/><input type=\"hidden\" value=\"halal\" name=\"gyerek\"/> </form>\n";
+    Response response;
+    response.setBody(request.getUrl());
+
+    client << response;
 
     client.close();
 }
@@ -71,4 +74,9 @@ int Server::getPortNumber()
 Server& server()
 {
     return Server::getInstance();
+}
+
+std::string Server::getResourceFolderPath()
+{
+    return this->resourceFolderPath;
 }

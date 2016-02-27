@@ -1,5 +1,6 @@
 #include "core.h"
 #include <unistd.h>
+#include <ctime>
 
 ClientConnection::ClientConnection(const int &address)
 {
@@ -14,6 +15,19 @@ int ClientConnection::getAddress()
 void ClientConnection::operator<<(const std::string &responseMessage)
 {
 	write(this->clientAddress, responseMessage.c_str(), responseMessage.size());
+}
+
+void ClientConnection::operator<<(Response &response)
+{
+    time_t currentTime;
+    time(&currentTime);
+    std::string actualTime = ctime(&currentTime);
+    actualTime = actualTime.substr(0, actualTime.size()-1);
+
+    response.setProperty("Date", actualTime);
+
+    std::string responseString = response.toString();
+    write(this->clientAddress, responseString.c_str(), responseString.size());
 }
 
 void ClientConnection::operator>>(std::string &requestString)
