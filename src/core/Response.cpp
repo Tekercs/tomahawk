@@ -41,27 +41,36 @@ std::string Core::Response::toString()
 
 Core::Response &Core::Response::setBody(const std::string &filePath)
 {
-    std::string path = server().getResourceFolderPath()
-                               .append(filePath);
+    this->body.clear();
 
-    std::ifstream file;
-    file.open(path, std::ios::binary);
-
-    std::string fileContent;
-    fileContent.clear();
-    if(file.is_open())
+    if(!filePath.empty() && filePath != "/")
     {
-        std::string fileLine;
-        while (getline(file, fileLine))
-            fileContent.append(fileLine);
+        std::string path = server().getResourceFolderPath()
+                .append(filePath);
 
-        file.close();
+        std::ifstream file;
+        file.open(path, std::ios::binary);
+
+        if(file.good())
+        {
+            if(file.is_open())
+            {
+                std::string fileLine;
+                while (getline(file, fileLine))
+                    this->body.append(fileLine);
+
+                file.close();
+            }
+
+            this->properties["Content-Length"] = std::to_string(this->body.size());
+            this->properties["Content-Type"] = this->fetchFileMimeType(filePath);
+            this->setStatusCode("200 OK");
+        }
+        else
+            this->setStatusCode("404 Not Found");
     }
-
-    this->body = fileContent;
-    this->properties["Content-Length"] = std::to_string(this->body.size());
-
-    this->properties["Content-Type"] = this->fetchFileMimeType(filePath);
+    else
+        this->setStatusCode("404 Not Found");
 
     return *this;
 }
@@ -87,9 +96,10 @@ std::string Core::Response::fetchFileMimeType(const std::string filePath)
 
 Core::Response &Core::Response::setBody(const std::string &content, const std::string &mimeType)
 {
-    this->setProperty("Content-Type", mimeType);
     this->body = content;
+    this->setProperty("Content-Type", mimeType);
     this->setProperty("Content-Length", std::to_string(this->body.size()));
+    this->setStatusCode("200 OK");
 
     return *this;
 }

@@ -2,7 +2,7 @@
 
 int main ()
 {
-    Core::server().setPortNumber(9099)
+    Core::server().setPortNumber(9000)
                   .setResourceFolderPath("./resources")
                   .start();
 
