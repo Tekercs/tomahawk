@@ -1,8 +1,8 @@
-#include "core.h"
+#include "Request.h"
 #include <sstream>
 
 
-Request::Request(const std::string &requestString)
+Core::Request::Request(const std::string &requestString)
 {
     std::vector<std::string> requestLines = this->requestStringToVector(requestString);
 
@@ -12,7 +12,7 @@ Request::Request(const std::string &requestString)
         this->separateBody(requestLines);
 }
 
-std::vector<std::string> Request::requestStringToVector(const std::string &requestString)
+std::vector<std::string> Core::Request::requestStringToVector(const std::string &requestString)
 {
     std::vector<std::string> requestStringLines;
     std::stringstream stream(requestString);
@@ -24,7 +24,7 @@ std::vector<std::string> Request::requestStringToVector(const std::string &reque
     return requestStringLines;
 }
 
-void Request::parseHeader(const std::vector<std::string> &requestLines)
+void Core::Request::parseHeader(const std::vector<std::string> &requestLines)
 {
 
     std::stringstream firstLineStream(requestLines[0]);
@@ -46,7 +46,7 @@ void Request::parseHeader(const std::vector<std::string> &requestLines)
     }
 }
 
-void Request::parseQueryStrings()
+void Core::Request::parseQueryStrings()
 {
     unsigned long delimiterPos = this->url.find('?');
     if(delimiterPos != std::string::npos)
@@ -64,7 +64,7 @@ void Request::parseQueryStrings()
     }
 }
 
-bool Request::isBodyNotEmpty()
+bool Core::Request::isBodyNotEmpty()
 {
     if(this->properties.find("Content-Length") != this->properties.end())
         return std::stoi(this->properties["Content-Length"], nullptr) > 0;
@@ -72,7 +72,7 @@ bool Request::isBodyNotEmpty()
         return false;
 }
 
-void Request::separateBody(const std::vector<std::string> &requestLines)
+void Core::Request::separateBody(const std::vector<std::string> &requestLines)
 {
 
     int8_t bodyIndex = 0;
@@ -90,7 +90,7 @@ void Request::separateBody(const std::vector<std::string> &requestLines)
     this->parseBody();
 }
 
-void Request::parseBody()
+void Core::Request::parseBody()
 {
 
     /**
@@ -118,7 +118,7 @@ void Request::parseBody()
 
 }
 
-void Request::decodeUrlEncodedFormData()
+void Core::Request::decodeUrlEncodedFormData()
 {
     std::stringstream bodyStream(this->body);
     std::string keyValuePair;
@@ -129,38 +129,38 @@ void Request::decodeUrlEncodedFormData()
     }
 }
 
-std::string Request::getBodyString()
+std::string Core::Request::getBodyString()
 {
     return this->body;
 }
 
-std::string Request::operator[](const std::string &fieldName)
+std::string Core::Request::operator[](const std::string &fieldName)
 {
     std::string value = this->parameters[fieldName];
     return (value != "")? value : this->properties[fieldName];
 }
 
-std::string Request::getProperty(const std::string &propertyName)
+std::string Core::Request::getProperty(const std::string &propertyName)
 {
     return this->properties[propertyName];
 }
 
-std::string Request::getParameter(const std::string &parameterName)
+std::string Core::Request::getParameter(const std::string &parameterName)
 {
     return this->parameters[parameterName];
 }
 
-std::string Request::getMethod()
+std::string Core::Request::getMethod()
 {
 	return this->method;
 }
 
-std::string Request::getUrl()
+std::string Core::Request::getUrl()
 {
 	return this->url;
 }
 
-std::string Request::getHttpVersion()
+std::string Core::Request::getHttpVersion()
 {
 	return this->httpVersion;
 }

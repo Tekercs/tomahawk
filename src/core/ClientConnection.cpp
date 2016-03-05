@@ -1,23 +1,24 @@
-#include "core.h"
+#include "ClientConnection.h"
 #include <unistd.h>
 #include <ctime>
+#include <sys/socket.h>
 
-ClientConnection::ClientConnection(const int &address)
+Core::ClientConnection::ClientConnection(const int &address)
 {
 	this->clientAddress = address;
 }
 
-int ClientConnection::getAddress()
+int Core::ClientConnection::getAddress()
 {
 	return this->clientAddress;
 }
 
-void ClientConnection::operator<<(const std::string &responseMessage)
+void Core::ClientConnection::operator<<(const std::string &responseMessage)
 {
 	write(this->clientAddress, responseMessage.c_str(), responseMessage.size());
 }
 
-void ClientConnection::operator<<(Response &response)
+void Core::ClientConnection::operator<<(Response &response)
 {
     time_t currentTime;
     time(&currentTime);
@@ -30,7 +31,7 @@ void ClientConnection::operator<<(Response &response)
     write(this->clientAddress, responseString.c_str(), responseString.size());
 }
 
-void ClientConnection::operator>>(std::string &requestString)
+void Core::ClientConnection::operator>>(std::string &requestString)
 {
 	char buffer[255];
 	ssize_t messageLength = 0;
@@ -45,7 +46,7 @@ void ClientConnection::operator>>(std::string &requestString)
 
 }
 
-void ClientConnection::close()
+void Core::ClientConnection::close()
 {
 	shutdown(this->clientAddress, 2);	
 }

@@ -1,9 +1,10 @@
-#include "core.h"
+#include "Response.h"
+#include "Server.h"
 #include <fstream>
 
 // Created by sebestyen on 17/02/16.
 
-Response::Response()
+Core::Response::Response()
 {
     this->body = "";
     this->httpVersion = "HTTP/1.1";
@@ -12,7 +13,7 @@ Response::Response()
     this->properties["Connection"] = "closed";
 }
 
-std::string Response::toString()
+std::string Core::Response::toString()
 {
     std::string responseString;
     responseString.append(this->httpVersion)
@@ -38,7 +39,7 @@ std::string Response::toString()
 
 }
 
-Response &Response::setBody(const std::string &filePath)
+Core::Response &Core::Response::setBody(const std::string &filePath)
 {
     std::string path = server().getResourceFolderPath()
                                .append(filePath);
@@ -65,7 +66,7 @@ Response &Response::setBody(const std::string &filePath)
     return *this;
 }
 
-std::string Response::fetchFileMimeType(const std::string filePath)
+std::string Core::Response::fetchFileMimeType(const std::string filePath)
 {
     std::map<std::string, std::string> mimeTypes = {
              {".css" , "text/css"}
@@ -84,7 +85,7 @@ std::string Response::fetchFileMimeType(const std::string filePath)
         return "*/*";
 }
 
-Response &Response::setBody(const std::string &content, const std::string &mimeType)
+Core::Response &Core::Response::setBody(const std::string &content, const std::string &mimeType)
 {
     this->setProperty("Content-Type", mimeType);
     this->body = content;
@@ -93,30 +94,30 @@ Response &Response::setBody(const std::string &content, const std::string &mimeT
     return *this;
 }
 
-std::string Response::getBody()
+std::string Core::Response::getBody()
 {
     return this->body;
 }
 
-Response &Response::setProperty(const std::string &name, const std::string &value)
+Core::Response &Core::Response::setProperty(const std::string &name, const std::string &value)
 {
     this->properties[name] = value;
 
     return *this;
 }
 
-std::string Response::getProperty(const std::string &propertyName)
+std::string Core::Response::getProperty(const std::string &propertyName)
 {
     return this->properties[propertyName];
 }
 
-Response &Response::setStatusCode(const std::string &newStatusCode)
+Core::Response &Core::Response::setStatusCode(const std::string &newStatusCode)
 {
     this->statusCode = newStatusCode;
     return *this;
 }
 
-bool Response::isEmptyBody()
+bool Core::Response::isEmptyBody()
 {
     return this->body.empty();
 }

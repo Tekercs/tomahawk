@@ -1,11 +1,11 @@
 #include "lib/gtest/include/gtest/gtest.h"
-#include "core/core.h"
+#include "core/Request.h"
 
 // ide jönnek a tesztek
 class GetRequestTest : public ::testing::Test
 {
     protected:
-        Request *request;
+        Core::Request *request;
 
         // Before, set up a Response Object
         virtual void SetUp()
@@ -22,7 +22,7 @@ class GetRequestTest : public ::testing::Test
                     "Accept-Language: en-US,en;q=0.8,hu;q=0.6\r\n"
                     "\r\n";
 
-            this->request = new Request(requestString);
+            this->request = new Core::Request(requestString);
         }
 
         virtual void TearDown()
@@ -57,7 +57,7 @@ TEST_F(GetRequestTest, queryStringParsing)
 class PostRequestTest : public ::testing::Test
 {
     protected:
-        Request *request;
+        Core::Request *request;
 
         virtual void SetUp()
         {
@@ -78,7 +78,7 @@ class PostRequestTest : public ::testing::Test
                     "\r\n"
                     "hegy=medve&gyerek=halal";
 
-            this->request = new Request(requestString);
+            this->request = new Core::Request(requestString);
         }
 
         virtual void TearDown()

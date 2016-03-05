@@ -1,5 +1,6 @@
 #include "lib/gtest/include/gtest/gtest.h"
-#include "core/core.h"
+#include "core/Response.h"
+#include "core/Server.h"
 
 //
 // Created by sebestyen on 22/02/16.
@@ -12,13 +13,13 @@ TEST(ResponseTest, emptyResponse)
                                    "Server: Tomahawk\r\n"
                                    "\r\n";
 
-    Response response;
+    Core::Response response;
     ASSERT_EQ(expectedResponse, response.toString());
 }
 
 TEST(ResponseTest, statusCode)
 {
-    Response response;
+    Core::Response response;
     response.setStatusCode("405 METHOD NOT ALLOWED");
 
     std::string expectedResponse = "HTTP/1.1 405 METHOD NOT ALLOWED\r\n"
@@ -31,7 +32,7 @@ TEST(ResponseTest, statusCode)
 
 TEST(ResponseTest, addNewHeaderProperty)
 {
-    Response response;
+    Core::Response response;
     response.setProperty("Date", "retes")
             .setProperty("Test-Property", "working");
 
@@ -47,7 +48,7 @@ TEST(ResponseTest, addNewHeaderProperty)
 
 TEST(ResponseTest, overrideHeaderProperty)
 {
-    Response response;
+    Core::Response response;
     response.setProperty("Content-Type", "text/html")
             .setProperty("Server", "retes")
             .setProperty("Content-Type", "text/css");
@@ -63,7 +64,7 @@ TEST(ResponseTest, overrideHeaderProperty)
 
 TEST(ResponseTest, plainTextBody)
 {
-    Response response;
+    Core::Response response;
 
     std::string exampleSentence = "Medve fut le ajegyörl, vigyázzon katinéni";
     response.setBody(exampleSentence, "text/plain");
@@ -78,9 +79,9 @@ TEST(ResponseTest, plainTextBody)
 
 TEST(ResponseTest, sendFileContent)
 {
-    server().setResourceFolderPath("./test_resources");
+    Core::server().setResourceFolderPath("./test_resources");
 
-    Response response1;
+    Core::Response response1;
     response1.setBody("/igen.html");
 
     ASSERT_EQ("text/html", response1.getProperty("Content-Type"));
@@ -99,7 +100,7 @@ TEST(ResponseTest, sendFileContent)
 
     ASSERT_EQ(expectedResponse1, response1.toString());
 
-    Response response2;
+    Core::Response response2;
     response2.setBody("/style.css");
 
     ASSERT_EQ("text/css", response2.getProperty("Content-Type"));

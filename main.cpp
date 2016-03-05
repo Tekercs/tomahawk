@@ -1,10 +1,10 @@
-#include "src/core/core.h"
+#include <core/Server.h>
 
 int main ()
 {
-	server().setPortNumber(9099)
-            .setResourceFolderPath("./resources")
-            .start();
+    Core::server().setPortNumber(9099)
+                  .setResourceFolderPath("./resources")
+                  .start();
 
 	return 0;
 }
