@@ -79,7 +79,7 @@ TEST(ResponseTest, plainTextBody)
 
 TEST(ResponseTest, sendFileContent)
 {
-    Core::server().setResourceFolderPath("./test_resources");
+    Core::server().setResourceFolderPath("../../tests/test_resources");
 
     Core::Response response1;
     response1.setBody("/igen.html");

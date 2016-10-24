@@ -1,8 +1,8 @@
 add_subdirectory(lib/gtest)
 
 FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/)
-FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/lib/)
-FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/lib/core/)
+FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/test)
+
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ../src)
 
@@ -14,4 +14,4 @@ target_link_libraries(tests core)
 
 set_target_properties( tests
         PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build/test)
