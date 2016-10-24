@@ -7,3 +7,7 @@ add_executable(tests
 
 target_link_libraries(tests gtest gtest_main)
 target_link_libraries(tests core)
+
+set_target_properties( tests
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
