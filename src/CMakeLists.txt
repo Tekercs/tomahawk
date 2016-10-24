@@ -1,4 +1,8 @@
 
+FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/)
+FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/lib/)
+FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/lib/core/)
+
 set(HEADERS core/Server.h core/ClientConnection.h core/Response.h core/Request.h)
 
 file(REMOVE ${PROJECT_SOURCE_DIR}/build/lib/*.h)

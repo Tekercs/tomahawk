@@ -1,5 +1,9 @@
 add_subdirectory(lib/gtest)
 
+FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/)
+FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/lib/)
+FILE(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/build/lib/core/)
+
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ../src)
 
 add_executable(tests
